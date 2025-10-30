@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: DreamCode
+  security:
+    user:
+      name: admin
+      password: admin123
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/db_name}
+    username: ${DB_USERNAME:username}
+    password: ${DB_PASSWORD:password}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
