@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/changes/001-init.yaml
   - include:
       file: db/changelog/changes/002-rename-user-table-to-users.yaml
+  - include:
+      file: db/changelog/changes/003-add-roles-column-users.yaml
