@@ -8,5 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/assets")
 public class AssetsController {
     @GetMapping("/health")
-    public String health() { return "assets-ok"; }
+    public String health() {
+        return "assets-ok";
+    }
 }

@@ -28,18 +28,17 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/auth/login", "/api/ping").permitAll()
+                        .requestMatchers("/auth/login", "/api/ping").permitAll()
 
-            // RBAC by domains
-            .requestMatchers("/api/reports/**").hasAnyRole("VIEWER", "ADMIN")
-            .requestMatchers("/api/assets/**").hasAnyRole("ASSET_MANAGER", "ADMIN")
-            .requestMatchers("/api/department/**").hasAnyRole("DEPT_MANAGER", "ADMIN")
-            .requestMatchers("/api/user/**").hasAnyRole("USER", "DEPT_MANAGER", "ASSET_MANAGER", "ADMIN")
+                        // RBAC by domains
+                        .requestMatchers("/api/reports/**").hasAnyRole("VIEWER", "ADMIN")
+                        .requestMatchers("/api/assets/**").hasAnyRole("ASSET_MANAGER", "ADMIN")
+                        .requestMatchers("/api/department/**").hasAnyRole("DEPT_MANAGER", "ADMIN")
+                        .requestMatchers("/api/user/**").hasAnyRole("USER", "DEPT_MANAGER", "ASSET_MANAGER", "ADMIN")
 
-            // Admin area
-            .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
-                )
+                        // Admin area
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

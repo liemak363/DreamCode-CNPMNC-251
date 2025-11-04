@@ -36,8 +36,8 @@ public class JwtService {
     }
 
     public String extractSubject(String token) {
-    return Jwts.parser()
-        .verifyWith(getSigningKey())
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
@@ -45,10 +45,20 @@ public class JwtService {
     }
 
     public Map<String, Object> extractAllClaims(String token) {
-    return Jwts.parser()
-        .verifyWith(getSigningKey())
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
+    }
+
+    public long extractExpirationEpochMilli(String token) {
+        var claims = Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        Date exp = claims.getExpiration();
+        return exp != null ? exp.getTime() : (System.currentTimeMillis() + jwtExpSeconds * 1000);
     }
 }

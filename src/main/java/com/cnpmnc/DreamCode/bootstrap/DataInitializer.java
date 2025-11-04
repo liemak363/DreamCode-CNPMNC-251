@@ -19,7 +19,7 @@ public class DataInitializer implements CommandLineRunner {
 
     @Value("${ADMIN_PASSWORD:admin123}")
     private String adminPassword;
-    
+
     @Value("${SEED_SAMPLE_USERS:true}")
     private boolean seedSampleUsers;
 
@@ -37,7 +37,7 @@ public class DataInitializer implements CommandLineRunner {
             admin.setRoles(List.of("ADMIN"));
             userRepository.save(admin);
         }
-        
+
         if (seedSampleUsers) {
             if (!userRepository.existsByUserName("viewer1")) {
                 User viewer = new User();
