@@ -27,3 +27,4 @@ spring:
 # Allow overriding server port from environment (e.g. .env)
 server:
   port: ${SERVER_PORT:8080}
+

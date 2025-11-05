@@ -4,9 +4,9 @@ databaseChangeLog:
   - include:
       file: db/changelog/changes/002-rename-user-table-to-users.yaml
   - include:
-      file: db/changelog/changes/003-category.yaml
+      file: db/changelog/changes/003-add-roles-column-users.yaml
   - include:
-      file: db/changelog/changes/004-db-diff-2025-11-01.yaml
+      file: db/changelog/changes/003-category.yaml
   - include:
       file: db/changelog/changes/005-mvp-db.yaml
   - include:
