@@ -31,6 +31,11 @@
 	</properties>
 	<dependencies>
 		<dependency>
+            <groupId>me.paulschwarz</groupId>
+            <artifactId>spring-dotenv</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
@@ -140,7 +145,11 @@
                 <configuration>
                     <propertyFile>src/main/resources/liquibase.properties</propertyFile>
                     <changeLogFile>src/main/resources/db/changelog/db.changelog-master.yaml</changeLogFile>
-                    <diffChangeLogFile>src/main/resources/db/changelog/changes/002-rename-user-table-to-users.yaml</diffChangeLogFile>
+					<diffChangeLogFile>src/main/resources/db/changelog/changes/006-add-category-to-asset.yaml</diffChangeLogFile>
+					<!-- Use environment variables when available -->
+					<url>${env.DB_URL}</url>
+					<username>${env.DB_USERNAME}</username>
+					<password>${env.DB_PASSWORD}</password>
                 </configuration>
                 <dependencies>
                     <dependency>

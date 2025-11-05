@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006-add-category-to-asset
+      author: thang
+      changes:
+        - addColumn:
+            tableName: asset
+            columns:
+              - column:
+                  name: category_id
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: category_id
+            baseTableName: asset
+            constraintName: FKe69ydkxgcthslax73274q33fs
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: category
+            validate: true
+        - dropTable:
+            tableName: request
+

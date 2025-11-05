@@ -16,9 +16,8 @@ import java.time.LocalDateTime;
 public class BaseEntity {
     @Id
     @GeneratedValue(
-            //            strategy = GenerationType.TABLE,
-//            strategy = GenerationType.SEQUENCE,
-//            generator = "author_id_gen"
+        strategy = GenerationType.IDENTITY
+        // If you want to use SEQUENCE per table instead, switch to GenerationType.SEQUENCE and configure a @SequenceGenerator per entity.
     )
 //    @SequenceGenerator(
 //            name = "author_seq_custom",

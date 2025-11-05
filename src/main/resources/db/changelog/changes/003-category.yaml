@@ -1,0 +1,38 @@
+databaseChangeLog:
+- changeSet:
+    id: 003-category
+    author: copilot
+    changes:
+    - createSequence:
+        incrementBy: 50
+        sequenceName: category_seq
+        startValue: 1
+    - createTable:
+        tableName: category
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: categoryPK
+            name: id
+            type: INTEGER
+        - column:
+            name: created_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: updated_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: description
+            type: VARCHAR(255)
+    - addUniqueConstraint:
+        tableName: category
+        columnNames: name
+        constraintName: uq_category_name

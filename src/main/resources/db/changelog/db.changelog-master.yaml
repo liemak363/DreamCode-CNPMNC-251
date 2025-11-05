@@ -3,3 +3,11 @@ databaseChangeLog:
       file: db/changelog/changes/001-init.yaml
   - include:
       file: db/changelog/changes/002-rename-user-table-to-users.yaml
+  - include:
+      file: db/changelog/changes/003-category.yaml
+  - include:
+      file: db/changelog/changes/004-db-diff-2025-11-01.yaml
+  - include:
+      file: db/changelog/changes/005-mvp-db.yaml
+  - include:
+      file: db/changelog/changes/006-add-category-to-asset.yaml
