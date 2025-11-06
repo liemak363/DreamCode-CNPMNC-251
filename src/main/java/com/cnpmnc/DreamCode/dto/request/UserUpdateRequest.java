@@ -1,4 +1,4 @@
-package com.cnpmnc.DreamCode.dto.response;
+package com.cnpmnc.DreamCode.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,14 +11,12 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserResponse {
-    private Integer id;
-
-    private String userName;
+public class UserUpdateRequest {
+    private String password;
 
     private String avatarKey;
 
     private Boolean isActive;
 
-    private Set<RoleResponse> roles;
+    private Set<String> roles;
 }
