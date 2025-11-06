@@ -22,6 +22,13 @@ public class User extends BaseEntity {
     @Column(name = "is_active", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean isActive;
 
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
+
+    @OneToOne(mappedBy = "manager")
+    private Department managedDepartment;
+
     @ManyToMany(mappedBy = "users")
     private List<AssetUsageLog> assetUsageLogs;
 

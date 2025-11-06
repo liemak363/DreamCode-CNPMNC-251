@@ -1,0 +1,49 @@
+databaseChangeLog:
+- changeSet:
+    id: 008-add-deptid-to-user
+    author: duong
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: department_id
+            type: INTEGER
+        tableName: users
+    - addColumn:
+        columns:
+        - column:
+            name: description
+            type: VARCHAR(255)
+        tableName: category
+    - addColumn:
+        columns:
+        - column:
+            name: manager_id
+            type: INTEGER
+        tableName: department
+    - addUniqueConstraint:
+        columnNames: manager_id
+        constraintName: UC_DEPARTMENTMANAGER_ID_COL
+        tableName: department
+    - addForeignKeyConstraint:
+        baseColumnNames: manager_id
+        baseTableName: department
+        constraintName: FK4b3j4ilxbfdt9fes1junm2cph
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: users
+        validate: true
+    - addForeignKeyConstraint:
+        baseColumnNames: department_id
+        baseTableName: users
+        constraintName: FKfi832e3qv89fq376fuh8920y4
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: department
+        validate: true
+    - dropColumn:
+        columnName: code
+        tableName: category
+

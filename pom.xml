@@ -167,7 +167,7 @@
                 <configuration>
                     <propertyFile>src/main/resources/liquibase.properties</propertyFile>
                     <changeLogFile>src/main/resources/db/changelog/db.changelog-master.yaml</changeLogFile>
-					<diffChangeLogFile>src/main/resources/db/changelog/changes/007-add-is-active-field-to-user.yaml</diffChangeLogFile>
+					<diffChangeLogFile>src/main/resources/db/changelog/changes/008-add-deptid-to-user.yaml</diffChangeLogFile>
 					<!-- Use environment variables when available -->
 					<url>${env.DB_URL}</url>
 					<username>${env.DB_USERNAME}</username>

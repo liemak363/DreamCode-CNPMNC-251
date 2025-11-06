@@ -13,3 +13,5 @@ databaseChangeLog:
       file: db/changelog/changes/006-add-category-to-asset.yaml
   - include:
         file: db/changelog/changes/007-add-is-active-field-to-user.yaml
+  - include:
+        file: db/changelog/changes/008-add-deptid-to-user.yaml
