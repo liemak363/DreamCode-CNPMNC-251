@@ -1,0 +1,15 @@
+databaseChangeLog:
+- changeSet:
+    id: 1762448505978-1
+    author: khoa
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            defaultValueBoolean: true
+            name: is_active
+            type: BOOLEAN
+        tableName: department
+

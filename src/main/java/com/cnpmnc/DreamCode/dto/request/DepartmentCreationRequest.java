@@ -9,17 +9,11 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class SupplierCreationRequest {
-    @NotBlank(message = "Supplier name is required and cannot be blank")
+public class DepartmentCreationRequest {
+    @NotBlank(message = "Department name is required and cannot be blank")
     String name;
-    @NotBlank(message = "Tax code is required and cannot be blank")
-    String taxCode;
-
-    String description;
-
-    String email;
-
-    String address;
 
     Boolean isActive = true;
+
+    Integer managerId;
 }

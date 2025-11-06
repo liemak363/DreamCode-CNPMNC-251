@@ -1,9 +1,7 @@
 package com.cnpmnc.DreamCode.api.admin;
 
-import com.cnpmnc.DreamCode.dto.request.SupplierCreationRequest;
-import com.cnpmnc.DreamCode.dto.request.SupplierUpdateRequest;
-import com.cnpmnc.DreamCode.dto.request.UserCreationRequest;
-import com.cnpmnc.DreamCode.dto.request.UserUpdateRequest;
+import com.cnpmnc.DreamCode.dto.request.*;
+import com.cnpmnc.DreamCode.dto.response.DepartmentResponse;
 import com.cnpmnc.DreamCode.dto.response.SupplierResponse;
 import com.cnpmnc.DreamCode.dto.response.UserResponse;
 import jakarta.validation.Valid;
@@ -27,8 +25,12 @@ public class AdminController {
     AdminService adminService;
 
     @PostMapping("/users")
-    UserResponse createUser(@RequestBody @Valid UserCreationRequest request) {
-        return adminService.createUser(request);
+    public ResponseEntity<?> createUser(@RequestBody @Valid UserCreationRequest request) {
+        try {
+            return ResponseEntity.ok(adminService.createUser(request));
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+        }
     }
 
     @GetMapping("/users")
@@ -56,7 +58,7 @@ public class AdminController {
     }
 
     @PostMapping("/suppliers")
-    SupplierResponse createSupplier(@RequestBody @Valid SupplierCreationRequest request) {
+    public SupplierResponse createSupplier(@RequestBody @Valid SupplierCreationRequest request) {
         return adminService.createSupplier(request);
     }
 
@@ -93,6 +95,35 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         } catch (IllegalStateException ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+        }
+    }
+
+    @PostMapping("/departments")
+    public DepartmentResponse createDepartment(@RequestBody @Valid DepartmentCreationRequest request) {
+        return adminService.createDepartment(request);
+    }
+
+    @GetMapping("/departments")
+    public List<DepartmentResponse> getDepartments(@RequestParam(defaultValue = "0") int page,
+                                                   @RequestParam(defaultValue = "10") int size) {
+        return adminService.getDepartments(page, size);
+    }
+
+    @GetMapping("/departments/{id}")
+    public ResponseEntity<?> getDepartment(@PathVariable Integer id) {
+        try {
+            return ResponseEntity.ok(adminService.getDepartment(id));
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+    }
+
+    @PutMapping("/departments/{id}")
+    public ResponseEntity<?> updateDepartment(@PathVariable Integer id, @Valid @RequestBody DepartmentUpdateRequest body) {
+        try {
+            return ResponseEntity.ok(adminService.updateDepartment(id, body));
+        } catch (IllegalArgumentException | IllegalStateException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 }

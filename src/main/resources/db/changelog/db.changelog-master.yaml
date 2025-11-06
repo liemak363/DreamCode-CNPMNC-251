@@ -19,3 +19,5 @@ databaseChangeLog:
         file: db/changelog/changes/009-create-suppliers-table.yaml
   - include:
         file: db/changelog/changes/010-create-request-and-inventory-table.yaml
+  - include:
+        file: db/changelog/changes/011-add-is-active-field-to-department.yaml

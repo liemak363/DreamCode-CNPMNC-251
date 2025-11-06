@@ -1,15 +1,15 @@
 package com.cnpmnc.DreamCode.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
 @Data
 public class Department extends BaseEntity {
     private String name;
+
+    @Column(name = "is_active", nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private Boolean isActive = true;
 
     @OneToOne
     @JoinColumn(name = "manager_id", unique = true)

@@ -20,7 +20,7 @@ public class User extends BaseEntity {
     private String avatarKey;
 
     @Column(name = "is_active", nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
-    private Boolean isActive;
+    private Boolean isActive = true;
 
     @ManyToOne
     @JoinColumn(name = "department_id")

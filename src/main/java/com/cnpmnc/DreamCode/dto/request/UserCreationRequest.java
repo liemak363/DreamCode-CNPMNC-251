@@ -1,6 +1,10 @@
 package com.cnpmnc.DreamCode.dto.request;
 
-import lombok.*;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
@@ -9,13 +13,15 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 public class UserCreationRequest {
+    @NotBlank(message = "Username is required and cannot be blank")
     private String userName;
 
+    @NotBlank(message = "Password is required and cannot be blank")
     private String password;
 
     private String avatarKey;
 
-    private Boolean isActive;
+    private Boolean isActive = true;
 
     private Set<String> roles;
 }
