@@ -167,7 +167,7 @@
                 <configuration>
                     <propertyFile>src/main/resources/liquibase.properties</propertyFile>
                     <changeLogFile>src/main/resources/db/changelog/db.changelog-master.yaml</changeLogFile>
-					<diffChangeLogFile>src/main/resources/db/changelog/changes/009-create-suppliers-table.yaml</diffChangeLogFile>
+					<diffChangeLogFile>src/main/resources/db/changelog/changes/010-create-request-and-inventory-table.yaml</diffChangeLogFile>
 					<!-- Use environment variables when available -->
 					<url>${env.DB_URL}</url>
 					<username>${env.DB_USERNAME}</username>

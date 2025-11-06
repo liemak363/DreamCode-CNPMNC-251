@@ -1,0 +1,147 @@
+databaseChangeLog:
+- changeSet:
+    id: 010-create-request-and-inventory-table
+    author: duong
+    changes:
+    # Create asset_request table
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: asset_requestPK
+            name: id
+            type: INTEGER
+        - column:
+            name: created_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: updated_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: notes
+            type: TEXT
+        - column:
+            name: priority
+            type: INTEGER
+        - column:
+            name: reason
+            type: TEXT
+        - column:
+            constraints:
+              nullable: false
+            name: status
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: type
+            type: VARCHAR(255)
+        - column:
+            name: asset_id
+            type: INTEGER
+        - column:
+            name: department_id
+            type: INTEGER
+        - column:
+            name: requester_id
+            type: INTEGER
+        tableName: asset_request
+
+    # Create inventory_check table
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: inventory_checkPK
+            name: id
+            type: INTEGER
+        - column:
+            name: created_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: updated_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: campaign_name
+            type: VARCHAR(255)
+        - column:
+            name: notes
+            type: TEXT
+        - column:
+            name: status
+            type: VARCHAR(255)
+        - column:
+            name: asset_id
+            type: INTEGER
+        - column:
+            name: checked_by_id
+            type: INTEGER
+        - column:
+            name: department_id
+            type: INTEGER
+        tableName: inventory_check
+
+    # Add foreign key constraints for asset_request
+    - addForeignKeyConstraint:
+        baseColumnNames: asset_id
+        baseTableName: asset_request
+        constraintName: FK5g2rj7y14d7i4s2lwl1nixj7m
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: asset
+        validate: true
+    - addForeignKeyConstraint:
+        baseColumnNames: department_id
+        baseTableName: asset_request
+        constraintName: FKr22hlsta3tq14tdsqalgimkor
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: department
+        validate: true
+    - addForeignKeyConstraint:
+        baseColumnNames: requester_id
+        baseTableName: asset_request
+        constraintName: FKrkqyuinxsan7mr3ljciru24y4
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: users
+        validate: true
+
+    # Add foreign key constraints for inventory_check
+    - addForeignKeyConstraint:
+        baseColumnNames: department_id
+        baseTableName: inventory_check
+        constraintName: FK7xnu3wq90d8w8wyexaqxv7ny7
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: department
+        validate: true
+    - addForeignKeyConstraint:
+        baseColumnNames: checked_by_id
+        baseTableName: inventory_check
+        constraintName: FKggeybt5ua72d05ddnjfethoh0
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: users
+        validate: true
+    - addForeignKeyConstraint:
+        baseColumnNames: asset_id
+        baseTableName: inventory_check
+        constraintName: FKiikmr30mhjc6ka8vxkixn42bt
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: asset
+        validate: true
+
