@@ -21,3 +21,5 @@ databaseChangeLog:
         file: db/changelog/changes/010-create-request-and-inventory-table.yaml
   - include:
         file: db/changelog/changes/011-add-is-active-field-to-department.yaml
+  - include:
+        file: db/changelog/changes/012-add-asset-status.yaml
