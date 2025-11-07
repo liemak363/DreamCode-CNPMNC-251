@@ -2,6 +2,7 @@ package com.cnpmnc.DreamCode.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -35,6 +36,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/assets/**").hasAnyRole("ASSET_MANAGER", "ADMIN")
                         .requestMatchers("/api/department/**").hasAnyRole("DEPT_MANAGER", "ADMIN")
                         .requestMatchers("/api/user/**").hasAnyRole("USER", "DEPT_MANAGER", "ASSET_MANAGER", "ADMIN")
+
+                        // Category - GET cho mọi người, CUD chỉ ADMIN
+                        .requestMatchers(HttpMethod.GET, "/api/categories/**").authenticated()
+                        .requestMatchers("/api/categories/**").hasRole("ADMIN")
 
                         // Admin area
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
