@@ -10,7 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface AssetRepository extends JpaRepository<Asset, Integer> {
     Page<Asset> findByDepartment(Department department, Pageable pageable);
 
@@ -28,13 +30,25 @@ public interface AssetRepository extends JpaRepository<Asset, Integer> {
         Pageable pageable
     );
 
-    // Từ nhánh THANG: Tìm kiếm tài sản
-    @Query("""
-        SELECT a FROM Asset a 
-        WHERE (:name IS NULL OR LOWER(a.name) LIKE LOWER(CONCAT('%', :name, '%')))
-        AND (:departmentId IS NULL OR a.department.id = :departmentId)
-        AND (:categoryId IS NULL OR a.category.id = :categoryId)
-        """)
+    // Tìm kiếm theo tên
+    Page<Asset> findByNameContainingIgnoreCase(String name, Pageable pageable);
+    
+    // Tìm theo department
+    Page<Asset> findByDepartmentId(Integer departmentId, Pageable pageable);
+    
+    // Tìm theo category
+    Page<Asset> findByCategoryId(Integer categoryId, Pageable pageable);
+    
+    // Tìm kiếm phức hợp
+    @Query(value = "SELECT * FROM asset a WHERE " +
+           "(:name IS NULL OR a.name ILIKE CONCAT('%', CAST(:name AS TEXT), '%')) AND " +
+           "(:departmentId IS NULL OR a.department_id = :departmentId) AND " +
+           "(:categoryId IS NULL OR a.category_id = :categoryId)",
+           countQuery = "SELECT COUNT(*) FROM asset a WHERE " +
+           "(:name IS NULL OR a.name ILIKE CONCAT('%', CAST(:name AS TEXT), '%')) AND " +
+           "(:departmentId IS NULL OR a.department_id = :departmentId) AND " +
+           "(:categoryId IS NULL OR a.category_id = :categoryId)",
+           nativeQuery = true)
     Page<Asset> searchAssets(
         @Param("name") String name,
         @Param("departmentId") Integer departmentId,
