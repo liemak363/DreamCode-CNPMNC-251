@@ -20,6 +20,8 @@ public class UserResponse {
 
     Boolean isActive;
 
+    String departmentName;
+
     LocalDateTime createdAt;
 
     LocalDateTime updatedAt;

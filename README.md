@@ -90,10 +90,10 @@ Request:
 POST /auth/login
 Content-Type: application/json
 
-{
+`{
   "username": "admin",
   "password": "admin123"
-}
+}`
 ```
 
 Response 200:
