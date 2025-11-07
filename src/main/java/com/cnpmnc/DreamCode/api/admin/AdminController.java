@@ -45,6 +45,18 @@ public class AdminController {
         return adminService.getActiveUsers(page, size);
     }
 
+    @GetMapping("/dept-managers")
+    public List<UserResponse> getDepartmentManagers(@RequestParam(defaultValue = "0") int page,
+                                                    @RequestParam(defaultValue = "10") int size) {
+        return adminService.getDepartmentManagers(page, size);
+    }
+
+    @GetMapping("dept-managers/active")
+    public List<UserResponse> getActiveDepartmentManagers(@RequestParam(defaultValue = "0") int page,
+                                                          @RequestParam(defaultValue = "10") int size) {
+        return adminService.getActiveDepartmentManagers(page, size);
+    }
+
     @GetMapping("/users/{id}")
     public ResponseEntity<?> getUser(@PathVariable Integer id) {
         try {

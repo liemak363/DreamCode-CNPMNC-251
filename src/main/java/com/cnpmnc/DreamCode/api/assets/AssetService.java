@@ -2,7 +2,9 @@ package com.cnpmnc.DreamCode.api.assets;
 
 import com.cnpmnc.DreamCode.constant.AssetStatus;
 import com.cnpmnc.DreamCode.dto.request.AssignAssetRequest;
+import com.cnpmnc.DreamCode.dto.request.RevokeAssetRequest;
 import com.cnpmnc.DreamCode.dto.response.AssignAssetResponse;
+import com.cnpmnc.DreamCode.dto.response.RevokeAssetResponse;
 import com.cnpmnc.DreamCode.mapper.AssignAssetMapper;
 import com.cnpmnc.DreamCode.model.Asset;
 import com.cnpmnc.DreamCode.model.AssetUsageLog;
@@ -80,10 +82,35 @@ public class AssetService {
         return response;
     }
 
+    public RevokeAssetResponse revokeAsset(RevokeAssetRequest request) {
+        // Find the active asset usage log for the given asset ID
+        AssetUsageLog assetUsageLog = assetUsageLogRepository.findByAssetIdAndEndTimeIsNull(request.getAssetId())
+                .orElseThrow(() -> new IllegalArgumentException("No active assignment found for asset ID " + request.getAssetId()));
+
+        // Set the end time to the current time
+        assetUsageLog.setEndTime(LocalDateTime.now());
+
+        // Update the asset status to IN_STOCK
+        Asset asset = assetUsageLog.getAsset();
+        asset.setStatus(AssetStatus.IN_STOCK);
+
+        // Save the updated asset usage log
+        assetUsageLog = assetUsageLogRepository.save(assetUsageLog);
+
+        // Map to RevokeAssetResponse
+        return RevokeAssetResponse.builder()
+                .id(assetUsageLog.getId())
+                .assetId(asset.getId())
+                .endTime(assetUsageLog.getEndTime())
+                .Status(asset.getStatus())
+                .build();
+    }
+
     public Integer getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         return userDetails.getId();
     }
+
 
 }

@@ -9,6 +9,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 
+
+
+import java.util.Optional;
+
 @Repository
 public interface AssetUsageLogRepository extends JpaRepository<AssetUsageLog, Integer> {
     
@@ -37,4 +41,5 @@ public interface AssetUsageLogRepository extends JpaRepository<AssetUsageLog, In
         @Param("userId") Integer userId,
         @Param("timestamp") LocalDateTime timestamp
     );
+    Optional<AssetUsageLog> findByAssetIdAndEndTimeIsNull(Integer assetId);
 }

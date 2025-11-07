@@ -73,11 +73,25 @@ public class AdminService {
     }
 
     public List<UserResponse> getUsers(int page, int size) {
-        return userRepository.findAll(PageRequest.of(page, size, Sort.by("id").descending())).stream().map(userMapper::toUserResponse).toList();
+        return userRepository.findAll(PageRequest.of(page, size, Sort.by("id").ascending())).stream().map(userMapper::toUserResponse).toList();
     }
 
     public List<UserResponse> getActiveUsers(int page, int size) {
-        return userRepository.findAllByIsActiveTrue(PageRequest.of(page, size, Sort.by("id").descending())).stream().map(userMapper::toUserResponse).toList();
+        return userRepository.findAllByIsActiveTrue(PageRequest.of(page, size, Sort.by("id").ascending())).stream().map(userMapper::toUserResponse).toList();
+    }
+
+    public List<UserResponse> getDepartmentManagers(int page, int size) {
+        return userRepository.findByRoles_Name(PredefinedRole.DEPT_MANAGER_ROLE, PageRequest.of(page, size, Sort.by("id").ascending()))
+                .stream()
+                .map(userMapper::toUserResponse)
+                .toList();
+    }
+
+    public List<UserResponse> getActiveDepartmentManagers(int page, int size) {
+        return userRepository.findByRoles_NameAndIsActiveTrue(PredefinedRole.DEPT_MANAGER_ROLE, PageRequest.of(page, size, Sort.by("id").ascending()))
+                .stream()
+                .map(userMapper::toUserResponse)
+                .toList();
     }
 
     public UserResponse getUser(Integer id) {
@@ -124,11 +138,11 @@ public class AdminService {
     }
 
     public List<SupplierResponse> getSuppliers(int page, int size) {
-        return supplierRepository.findAll(PageRequest.of(page, size, Sort.by("id").descending())).stream().map(supplierMapper::toSupplierResponse).toList();
+        return supplierRepository.findAll(PageRequest.of(page, size, Sort.by("id").ascending())).stream().map(supplierMapper::toSupplierResponse).toList();
     }
 
     public List<SupplierResponse> getActiveSuppliers(int page, int size) {
-        return supplierRepository.findAllByIsActiveTrue(PageRequest.of(page, size, Sort.by("id").descending())).stream().map(supplierMapper::toSupplierResponse).toList();
+        return supplierRepository.findAllByIsActiveTrue(PageRequest.of(page, size, Sort.by("id").ascending())).stream().map(supplierMapper::toSupplierResponse).toList();
     }
 
     public SupplierResponse getSupplier(Integer id) {
@@ -182,11 +196,11 @@ public class AdminService {
     }
 
     public List<DepartmentResponse> getDepartments(int page, int size) {
-        return departmentRepository.findAll(PageRequest.of(page, size, Sort.by("id").descending())).stream().map(departmentMapper::toDepartmentResponse).toList();
+        return departmentRepository.findAll(PageRequest.of(page, size, Sort.by("id").ascending())).stream().map(departmentMapper::toDepartmentResponse).toList();
     }
 
     public List<DepartmentResponse> getActiveDepartments(int page, int size) {
-        return departmentRepository.findAllByIsActiveTrue(PageRequest.of(page, size, Sort.by("id").descending())).stream().map(departmentMapper::toDepartmentResponse).toList();
+        return departmentRepository.findAllByIsActiveTrue(PageRequest.of(page, size, Sort.by("id").ascending())).stream().map(departmentMapper::toDepartmentResponse).toList();
     }
 
     public DepartmentResponse getDepartment(Integer id) {

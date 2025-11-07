@@ -1,6 +1,7 @@
 package com.cnpmnc.DreamCode.api.assets;
 
 import com.cnpmnc.DreamCode.dto.request.AssignAssetRequest;
+import com.cnpmnc.DreamCode.dto.request.RevokeAssetRequest;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +32,13 @@ public class AssetController {
         }
     }
 
+    @PostMapping("/revoke")
+    public ResponseEntity<?> revokeAsset(@RequestBody @Valid RevokeAssetRequest request) {
+        try {
+            return ResponseEntity.ok(assetService.revokeAsset(request));
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+        }
+    }
 
 }
