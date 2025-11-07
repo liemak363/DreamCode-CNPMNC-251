@@ -4,6 +4,7 @@ import com.cnpmnc.DreamCode.model.enumType.ApprovalStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
@@ -15,9 +16,11 @@ public class AssignAssetRequest {
     Integer assetId;
     Set<Integer> userIds;
 
-    private String notes;
+    String notes;
 
-    private String approvalStatus = ApprovalStatus.APPROVED.toString();
+    LocalDateTime beginTime;
 
-    private String approvalNotes;
+    String approvalStatus = ApprovalStatus.APPROVED.toString();
+
+    String approvalNotes;
 }

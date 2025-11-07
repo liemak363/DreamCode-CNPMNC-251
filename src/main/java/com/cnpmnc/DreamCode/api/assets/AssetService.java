@@ -67,7 +67,9 @@ public class AssetService {
         assetUsageLog.setApprovedBy(approvedBy);
 
         // Set the current time as beginTime
-        assetUsageLog.setBeginTime(LocalDateTime.now());
+        if (request.getBeginTime() == null) {
+            assetUsageLog.setBeginTime(LocalDateTime.now());
+        }
 
         // Save the asset usage log
         assetUsageLog = assetUsageLogRepository.save(assetUsageLog);

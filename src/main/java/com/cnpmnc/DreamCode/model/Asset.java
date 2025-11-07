@@ -17,9 +17,11 @@ public class Asset extends BaseEntity {
     @Convert(converter = StringListConverter.class)
     @Column(columnDefinition = "TEXT")
     private List<String> imageKeys;
-    
+
     private Date purchaseDate;
     private Double value;
+
+    private Integer usefulLifeMonths;
 
     private String status;
 
@@ -31,6 +33,16 @@ public class Asset extends BaseEntity {
             mappedBy = "asset"
     )
     private List<AssetUsageLog> usageLogs;
+
+    @OneToMany(
+            mappedBy = "asset"
+    )
+    private List<AssetRevokeLog> revokeLogs;
+
+    @OneToMany(
+            mappedBy = "asset"
+    )
+    private List<AssetRetireLog> retireLogs;
 
     @OneToMany(
             mappedBy = "asset"

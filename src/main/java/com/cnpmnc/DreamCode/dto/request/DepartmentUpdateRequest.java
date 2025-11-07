@@ -11,6 +11,8 @@ import lombok.experimental.FieldDefaults;
 public class DepartmentUpdateRequest {
     String name;
 
+    String code;
+
     Boolean isActive;
 
     Integer managerId;

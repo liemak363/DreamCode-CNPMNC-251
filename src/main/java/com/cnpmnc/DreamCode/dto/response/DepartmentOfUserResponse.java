@@ -15,6 +15,8 @@ public class DepartmentOfUserResponse {
 
     String name;
 
+    String code;
+
     Boolean isActive;
 
     LocalDateTime createdAt;

@@ -35,6 +35,12 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "approvedBy")
     private List<AssetUsageLog> approvedAssetUsageLogs;
 
+    @OneToMany(mappedBy = "revokedBy")
+    private List<AssetRevokeLog> revokedAssetLogs;
+
+    @OneToMany(mappedBy = "retiredBy")
+    private List<AssetRetireLog> retiredAssetLogs;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",

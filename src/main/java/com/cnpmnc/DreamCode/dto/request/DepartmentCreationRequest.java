@@ -13,6 +13,8 @@ public class DepartmentCreationRequest {
     @NotBlank(message = "Department name is required and cannot be blank")
     String name;
 
+    String code;
+
     Boolean isActive = true;
 
     Integer managerId;

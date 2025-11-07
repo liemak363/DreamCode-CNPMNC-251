@@ -15,6 +15,8 @@ public class DepartmentResponse {
 
     String name;
 
+    String code;
+
     Boolean isActive;
 
     UserResponse manager;

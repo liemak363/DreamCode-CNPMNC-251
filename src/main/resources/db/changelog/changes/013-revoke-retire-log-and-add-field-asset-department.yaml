@@ -1,0 +1,146 @@
+databaseChangeLog:
+- changeSet:
+    id: 1762544745623-1
+    author: khoa
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: asset_retire_logPK
+            name: id
+            type: INTEGER
+        - column:
+            name: created_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: updated_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: reason
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: retired_time
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: salvage_value
+            type: FLOAT(53)
+        - column:
+            constraints:
+              nullable: false
+            name: asset_id
+            type: INTEGER
+        - column:
+            constraints:
+              nullable: false
+            name: retired_by_id
+            type: INTEGER
+        tableName: asset_retire_log
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: asset_revoke_logPK
+            name: id
+            type: INTEGER
+        - column:
+            name: created_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: updated_at
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            name: reason
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: revoked_time
+            type: TIMESTAMP(6) WITHOUT TIME ZONE
+        - column:
+            constraints:
+              nullable: false
+            name: asset_id
+            type: INTEGER
+        - column:
+            constraints:
+              nullable: false
+            name: revoked_by_id
+            type: INTEGER
+        tableName: asset_revoke_log
+    - addColumn:
+        columns:
+        - column:
+            name: code
+            type: VARCHAR(255)
+        tableName: department
+    - addColumn:
+        columns:
+        - column:
+            name: useful_life_months
+            type: INTEGER
+        tableName: asset
+    - addUniqueConstraint:
+        columnNames: code
+        constraintName: UC_DEPARTMENTCODE_COL
+        tableName: department
+    - addForeignKeyConstraint:
+        baseColumnNames: asset_id
+        baseTableName: asset_retire_log
+        constraintName: FK4r34o50oi38uu2o4x30ltie58
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: asset
+        validate: true
+    - addForeignKeyConstraint:
+        baseColumnNames: retired_by_id
+        baseTableName: asset_retire_log
+        constraintName: FK62irhe3mub3585milpn15jr0y
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: users
+        validate: true
+    - addForeignKeyConstraint:
+        baseColumnNames: revoked_by_id
+        baseTableName: asset_revoke_log
+        constraintName: FKbm2qtf78i21frfjrmyiep2g7l
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: users
+        validate: true
+    - addForeignKeyConstraint:
+        baseColumnNames: asset_id
+        baseTableName: asset_revoke_log
+        constraintName: FKdemqpxthbug1xiwp8v7j4qcg4
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: asset
+        validate: true
+    - dropColumn:
+        columnName: image_keys
+        tableName: asset_accident_log
+    - dropColumn:
+        columnName: reporter_department_name
+        tableName: asset_accident_log
+    - dropColumn:
+        columnName: reporter_user_name
+        tableName: asset_accident_log
+    - dropColumn:
+        columnName: resolution_notes
+        tableName: asset_accident_log
+    - dropColumn:
+        columnName: status
+        tableName: asset_accident_log
+

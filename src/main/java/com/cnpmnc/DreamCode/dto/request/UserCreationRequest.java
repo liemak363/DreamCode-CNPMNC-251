@@ -16,14 +16,13 @@ public class UserCreationRequest {
     @NotBlank(message = "Username is required and cannot be blank")
     private String userName;
 
-    @NotBlank(message = "Password is required and cannot be blank")
-    private String password;
+    private String password = "12345678";
 
     private String avatarKey;
 
     private Boolean isActive = true;
 
     private Integer departmentId;
-    
+
     private Set<String> roles;
 }
