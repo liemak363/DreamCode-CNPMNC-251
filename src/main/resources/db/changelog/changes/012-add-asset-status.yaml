@@ -1,0 +1,11 @@
+databaseChangeLog:
+- changeSet:
+    id: 1762505563986-1
+    author: khoa
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: status
+            type: VARCHAR(255)
+        tableName: asset

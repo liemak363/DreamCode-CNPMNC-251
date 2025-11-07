@@ -2,7 +2,9 @@ package com.cnpmnc.DreamCode.api.assets;
 
 import com.cnpmnc.DreamCode.dto.request.*;
 import com.cnpmnc.DreamCode.dto.response.AssetResponse;
+import com.cnpmnc.DreamCode.dto.response.AssetUsageLogResponse;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,19 +12,18 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/assets")
+@RequiredArgsConstructor
 public class AssetsController {
     
     private final AssetService assetService;
-
-    public AssetsController(AssetService assetService) {
-        this.assetService = assetService;
-    }
 
     // Health check
     @GetMapping("/health")
     public String health() {
         return "assets-ok";
     }
+
+    // ========== TỪ NHÁNH THANG: CRUD Tài sản ==========
 
     // 1. Tạo tài sản mới
     @PostMapping
@@ -78,27 +79,38 @@ public class AssetsController {
         }
     }
 
-    // 9. Lịch sử tài sản
-    @GetMapping("/{id}/history")
-    public ResponseEntity<?> getAssetHistory(@PathVariable Integer id,
-                                            @RequestParam(defaultValue = "0") int page,
-                                            @RequestParam(defaultValue = "10") int size) {
+    // 6. Lịch sử sử dụng tài sản
+    @GetMapping("/{id}/usage-logs")
+    public ResponseEntity<?> getAssetUsageLogs(@PathVariable Integer id,
+                                               @RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "10") int size) {
         try {
-            return ResponseEntity.ok(assetService.getAssetHistory(id, page, size));
+            Page<AssetUsageLogResponse> logs = assetService.getAssetUsageLogs(id, page, size);
+            return ResponseEntity.ok(logs);
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
 
-    // 10. Lịch sử user sử dụng tài sản
-    @GetMapping("/user/{userId}/history")
-    public ResponseEntity<?> getUserAssetHistory(@PathVariable Integer userId,
-                                                 @RequestParam(defaultValue = "0") int page,
-                                                 @RequestParam(defaultValue = "10") int size) {
+    // ========== TỪ NHÁNH MAIN: Assign & Revoke ==========
+
+    // 7. Phân bổ tài sản cho người dùng
+    @PostMapping("/assign")
+    public ResponseEntity<?> assignAsset(@RequestBody @Valid AssignAssetRequest request) {
         try {
-            return ResponseEntity.ok(assetService.getUserAssetHistory(userId, page, size));
+            return ResponseEntity.ok(assetService.assignAsset(request));
         } catch (IllegalArgumentException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+        }
+    }
+
+    // 8. Thu hồi tài sản
+    @PostMapping("/revoke")
+    public ResponseEntity<?> revokeAsset(@RequestBody @Valid RevokeAssetRequest request) {
+        try {
+            return ResponseEntity.ok(assetService.revokeAsset(request));
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
         }
     }
 }

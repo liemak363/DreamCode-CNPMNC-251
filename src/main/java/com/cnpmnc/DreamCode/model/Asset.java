@@ -32,19 +32,13 @@ public class Asset extends BaseEntity {
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
-    @OneToMany(
-            mappedBy = "asset"
-    )
+    @OneToMany(mappedBy = "asset")
     private List<AssetUsageLog> usageLogs;
 
-    @OneToMany(
-            mappedBy = "asset"
-    )
+    @OneToMany(mappedBy = "asset")
     private List<AssetMaintenanceLog> maintenanceLogs;
 
-    @OneToMany(
-            mappedBy = "asset"
-    )
+    @OneToMany(mappedBy = "asset")
     private List<AssetAccidentLog> accidentLogs;
 
     @ManyToOne

@@ -25,4 +25,5 @@ public class AssetUpdateRequest {
     
     private Integer departmentId;
     private Integer categoryId;
+    private Integer supplierId;
 }

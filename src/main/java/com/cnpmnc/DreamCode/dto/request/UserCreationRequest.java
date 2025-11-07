@@ -23,5 +23,7 @@ public class UserCreationRequest {
 
     private Boolean isActive = true;
 
+    private Integer departmentId;
+    
     private Set<String> roles;
 }

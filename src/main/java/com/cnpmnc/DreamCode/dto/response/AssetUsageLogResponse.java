@@ -15,10 +15,12 @@ import java.util.List;
 @Builder
 public class AssetUsageLogResponse {
     private Integer id;
+    private Integer assetId;
+    private String assetName;
     private LocalDateTime beginTime;
     private LocalDateTime endTime;
     private String notes;
-    private ApprovalStatus approvalStatus;
+    private String approvalStatus;
     private String approvalNotes;
     private LocalDateTime createdAt;
     

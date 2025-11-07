@@ -1,4 +1,4 @@
-package com.cnpmnc.DreamCode.api.admin;
+package com.cnpmnc.DreamCode.mapper;
 
 import com.cnpmnc.DreamCode.dto.response.PermissionResponse;
 import com.cnpmnc.DreamCode.model.Permission;

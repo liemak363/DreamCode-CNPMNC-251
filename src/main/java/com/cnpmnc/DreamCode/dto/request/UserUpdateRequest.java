@@ -18,5 +18,7 @@ public class UserUpdateRequest {
 
     private Boolean isActive;
 
+    private Integer departmentId;
+    
     private Set<String> roles;
 }

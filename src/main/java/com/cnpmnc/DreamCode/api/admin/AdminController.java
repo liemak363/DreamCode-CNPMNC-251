@@ -39,6 +39,24 @@ public class AdminController {
         return adminService.getUsers(page, size);
     }
 
+    @GetMapping("/users/active")
+    public List<UserResponse> getActiveUsers(@RequestParam(defaultValue = "0") int page,
+                                             @RequestParam(defaultValue = "10") int size) {
+        return adminService.getActiveUsers(page, size);
+    }
+
+    @GetMapping("/dept-managers")
+    public List<UserResponse> getDepartmentManagers(@RequestParam(defaultValue = "0") int page,
+                                                    @RequestParam(defaultValue = "10") int size) {
+        return adminService.getDepartmentManagers(page, size);
+    }
+
+    @GetMapping("dept-managers/active")
+    public List<UserResponse> getActiveDepartmentManagers(@RequestParam(defaultValue = "0") int page,
+                                                          @RequestParam(defaultValue = "10") int size) {
+        return adminService.getActiveDepartmentManagers(page, size);
+    }
+
     @GetMapping("/users/{id}")
     public ResponseEntity<?> getUser(@PathVariable Integer id) {
         try {
@@ -66,6 +84,12 @@ public class AdminController {
     public List<SupplierResponse> getSuppliers(@RequestParam(defaultValue = "0") int page,
                                                @RequestParam(defaultValue = "10") int size) {
         return adminService.getSuppliers(page, size);
+    }
+
+    @GetMapping("/suppliers/active")
+    public List<SupplierResponse> getActiveSuppliers(@RequestParam(defaultValue = "0") int page,
+                                                     @RequestParam(defaultValue = "10") int size) {
+        return adminService.getActiveSuppliers(page, size);
     }
 
     @GetMapping("/suppliers/{id}")
@@ -107,6 +131,12 @@ public class AdminController {
     public List<DepartmentResponse> getDepartments(@RequestParam(defaultValue = "0") int page,
                                                    @RequestParam(defaultValue = "10") int size) {
         return adminService.getDepartments(page, size);
+    }
+
+    @GetMapping("/departments/active")
+    public List<DepartmentResponse> getActiveDepartments(@RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "10") int size) {
+        return adminService.getActiveDepartments(page, size);
     }
 
     @GetMapping("/departments/{id}")
