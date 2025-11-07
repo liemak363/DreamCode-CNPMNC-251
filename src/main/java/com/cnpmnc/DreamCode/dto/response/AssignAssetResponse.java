@@ -11,24 +11,22 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserResponse {
+public class AssignAssetResponse {
     Integer id;
+    Integer assetId;
+    Set<Integer> userIds;
 
-    String userName;
+    String notes;
 
-    String avatarKey;
+    String approvalStatus;
 
-    Boolean isActive;
-
-    String departmentName;
+    String approvalNotes;
 
     LocalDateTime createdAt;
 
     LocalDateTime updatedAt;
 
-    Set<RoleResponse> roles;
+    LocalDateTime beginTime;
 
-    DepartmentOfUserResponse department;
-
-    DepartmentOfUserResponse managedDepartment;
+    LocalDateTime endTime;
 }

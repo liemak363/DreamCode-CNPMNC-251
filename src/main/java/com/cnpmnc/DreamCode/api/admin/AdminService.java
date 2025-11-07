@@ -5,6 +5,9 @@ import com.cnpmnc.DreamCode.dto.request.*;
 import com.cnpmnc.DreamCode.dto.response.DepartmentResponse;
 import com.cnpmnc.DreamCode.dto.response.SupplierResponse;
 import com.cnpmnc.DreamCode.dto.response.UserResponse;
+import com.cnpmnc.DreamCode.mapper.DepartmentMapper;
+import com.cnpmnc.DreamCode.mapper.SupplierMapper;
+import com.cnpmnc.DreamCode.mapper.UserMapper;
 import com.cnpmnc.DreamCode.model.Department;
 import com.cnpmnc.DreamCode.model.Role;
 import com.cnpmnc.DreamCode.model.Supplier;
@@ -37,7 +40,7 @@ public class AdminService {
     UserMapper userMapper;
     SupplierMapper supplierMapper;
     DepartmentMapper departmentMapper;
-    private final SupplierRepository supplierRepository;
+    SupplierRepository supplierRepository;
 
     public UserResponse createUser(UserCreationRequest request) {
 
@@ -54,7 +57,15 @@ public class AdminService {
             roleRepository.findByName(role).ifPresent(roles::add);
         }
 
+
         user.setRoles(roles);
+
+        // Check if the department exists
+        if (request.getDepartmentId() != null) {
+            Department department = departmentRepository.findById(request.getDepartmentId())
+                    .orElseThrow(() -> new IllegalArgumentException("Department with ID " + request.getDepartmentId() + " does not exist."));
+            user.setDepartment(department);
+        }
 
         user = userRepository.save(user);
 
@@ -63,6 +74,10 @@ public class AdminService {
 
     public List<UserResponse> getUsers(int page, int size) {
         return userRepository.findAll(PageRequest.of(page, size, Sort.by("id").descending())).stream().map(userMapper::toUserResponse).toList();
+    }
+
+    public List<UserResponse> getActiveUsers(int page, int size) {
+        return userRepository.findAllByIsActiveTrue(PageRequest.of(page, size, Sort.by("id").descending())).stream().map(userMapper::toUserResponse).toList();
     }
 
     public UserResponse getUser(Integer id) {
@@ -77,6 +92,13 @@ public class AdminService {
         if (request.getPassword() != null && !request.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(request.getPassword()));
         }
+
+        if (request.getDepartmentId() != null) {
+            Department department = departmentRepository.findById(request.getDepartmentId())
+                    .orElseThrow(() -> new IllegalArgumentException("Department with ID " + request.getDepartmentId() + " does not exist."));
+            user.setDepartment(department);
+        }
+
         if (request.getRoles() != null && !request.getRoles().isEmpty()) {
             // Validate that DEPT_MANAGER role is not in the request
             if (request.getRoles().contains(PredefinedRole.DEPT_MANAGER_ROLE)) {
@@ -103,6 +125,10 @@ public class AdminService {
 
     public List<SupplierResponse> getSuppliers(int page, int size) {
         return supplierRepository.findAll(PageRequest.of(page, size, Sort.by("id").descending())).stream().map(supplierMapper::toSupplierResponse).toList();
+    }
+
+    public List<SupplierResponse> getActiveSuppliers(int page, int size) {
+        return supplierRepository.findAllByIsActiveTrue(PageRequest.of(page, size, Sort.by("id").descending())).stream().map(supplierMapper::toSupplierResponse).toList();
     }
 
     public SupplierResponse getSupplier(Integer id) {
@@ -157,6 +183,10 @@ public class AdminService {
 
     public List<DepartmentResponse> getDepartments(int page, int size) {
         return departmentRepository.findAll(PageRequest.of(page, size, Sort.by("id").descending())).stream().map(departmentMapper::toDepartmentResponse).toList();
+    }
+
+    public List<DepartmentResponse> getActiveDepartments(int page, int size) {
+        return departmentRepository.findAllByIsActiveTrue(PageRequest.of(page, size, Sort.by("id").descending())).stream().map(departmentMapper::toDepartmentResponse).toList();
     }
 
     public DepartmentResponse getDepartment(Integer id) {

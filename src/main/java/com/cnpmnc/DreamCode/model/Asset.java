@@ -26,6 +26,7 @@ public class Asset extends BaseEntity {
         private Date purchaseDate;
         private Double value;
 
+        private String status;
         @ManyToOne
         @JoinColumn(name = "department_id", nullable = false)
         private Department department;

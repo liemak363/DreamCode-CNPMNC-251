@@ -173,7 +173,7 @@
                 <configuration>
                     <propertyFile>src/main/resources/liquibase.properties</propertyFile>
                     <changeLogFile>src/main/resources/db/changelog/db.changelog-master.yaml</changeLogFile>
-					<diffChangeLogFile>src/main/resources/db/changelog/changes/011-add-is-active-field-to-department.yaml</diffChangeLogFile>
+					<diffChangeLogFile>src/main/resources/db/changelog/changes/012-add-asset-status.yaml</diffChangeLogFile>
 					<!-- Use environment variables when available -->
 					<url>${env.DB_URL}</url>
 					<username>${env.DB_USERNAME}</username>

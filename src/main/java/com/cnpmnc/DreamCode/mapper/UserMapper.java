@@ -1,4 +1,4 @@
-package com.cnpmnc.DreamCode.api.admin;
+package com.cnpmnc.DreamCode.mapper;
 
 import com.cnpmnc.DreamCode.dto.request.UserCreationRequest;
 import com.cnpmnc.DreamCode.dto.request.UserUpdateRequest;
