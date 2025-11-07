@@ -1,4 +1,4 @@
-// package com.cnpmnc.DreamCode.api.user;
+package com.cnpmnc.DreamCode.mapper;
 
 // import com.cnpmnc.DreamCode.dto.response.AccidentLogResponse;
 // import com.cnpmnc.DreamCode.model.AssetAccidentLog;

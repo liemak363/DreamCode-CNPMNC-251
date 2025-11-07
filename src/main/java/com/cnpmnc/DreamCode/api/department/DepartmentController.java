@@ -29,7 +29,6 @@ public class DepartmentController {
         return "department-ok";
     }
     
-    // Helper methods
     private User getUser(Authentication auth) {
         CustomUserDetails ud = (CustomUserDetails) auth.getPrincipal();
         return userRepository.findById(ud.getId()).orElseThrow();
@@ -39,34 +38,6 @@ public class DepartmentController {
         return departmentRepository.findByManager(user)
                 .orElseThrow(() -> new IllegalArgumentException("You are not managing any department"));
     }
-    
-    // DEBUG: Kiểm tra thông tin user hiện tại
-    @GetMapping("/me")
-    public Map<String, Object> getCurrentUserInfo(Authentication auth) {
-        User user = getUser(auth);
-        Department dept = departmentRepository.findByManager(user).orElse(null);
-        
-        return Map.of(
-            "userId", user.getId(),
-            "userName", user.getUserName(),
-            "roles", user.getRoles().stream().map(r -> r.getName()).toList(),
-            "hasManagedDepartment", dept != null,
-            "managedDepartmentId", dept != null ? dept.getId() : null,
-            "managedDepartmentName", dept != null ? dept.getName() : null
-        );
-    }
-    
-    @GetMapping("/test")
-    public Map<String, Object> test(Authentication auth) {
-        User user = getUser(auth);
-        return Map.of(
-            "message", "Test OK",
-            "userId", user.getId(),
-            "userName", user.getUserName()
-        );
-    }
-    
-    // ========== 1. QUẢN LÝ TÀI SẢN PHÒNG BAN ==========
     
     @GetMapping("/assets")
     public ResponseEntity<?> getAssets(
@@ -79,7 +50,6 @@ public class DepartmentController {
             
             Page<Asset> assets = assetRepository.findByDepartment(dept, PageRequest.of(page, size));
             
-            // Convert sang DTO
             Page<AssetResponse> response = assets.map(DepartmentMapper::toAssetSimpleResponse);
             
             return ResponseEntity.ok(response);
@@ -102,7 +72,6 @@ public class DepartmentController {
             Asset asset = assetRepository.findById(assetId)
                     .orElseThrow(() -> new IllegalArgumentException("Asset not found"));
             
-            // Kiểm tra asset có thuộc department không
             if (!asset.getDepartment().getId().equals(dept.getId())) {
                 return ResponseEntity.status(403).body(Map.of("error", "This asset does not belong to your department"));
             }
@@ -113,7 +82,6 @@ public class DepartmentController {
         }
     }
     
-    // ========== 2. TẠO REQUEST CHO ASSET_MANAGER ==========
     
     @PostMapping("/requests")
     public ResponseEntity<?> createRequest(
@@ -123,7 +91,7 @@ public class DepartmentController {
             User user = getUser(auth);
             Department dept = getManagedDepartment(user);
             
-            String type = (String) body.get("type"); // PROVISION, RECALL, TRANSFER
+            String type = (String) body.get("type"); 
             if (type == null) {
                 return ResponseEntity.badRequest().body(Map.of("error", "type is required"));
             }
@@ -131,12 +99,11 @@ public class DepartmentController {
             AssetRequest req = new AssetRequest();
             req.setType(type);
             req.setStatus(ApprovalStatus.PENDING);
-            req.setRequester(user); // DEPT_MANAGER tạo
+            req.setRequester(user); 
             req.setDepartment(dept);
             req.setReason((String) body.get("reason"));
             req.setPriority((Integer) body.getOrDefault("priority", 2));
             
-            // Nếu có assetId (RECALL/TRANSFER)
             if (body.get("assetId") != null) {
                 Integer assetId = (Integer) body.get("assetId");
                 Asset asset = assetRepository.findById(assetId).orElse(null);
@@ -169,7 +136,6 @@ public class DepartmentController {
         }
     }
     
-    // ========== 3. KIỂM KÊ TÀI SẢN ==========
     
     @GetMapping("/inventory")
     public ResponseEntity<?> getInventory(
@@ -201,7 +167,6 @@ public class DepartmentController {
             InventoryCheck inv = inventoryRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("Inventory check not found"));
             
-            // Kiểm tra có phải department của mình không
             if (!inv.getDepartment().getId().equals(dept.getId())) {
                 return ResponseEntity.status(403).body(Map.of("error", "Not your department's inventory"));
             }
@@ -218,7 +183,6 @@ public class DepartmentController {
         }
     }
     
-    // ========== 4. DUYỆT REQUEST TỪ USER ==========
     
     @GetMapping("/user-requests")
     public ResponseEntity<?> getUserRequests(
@@ -263,7 +227,7 @@ public class DepartmentController {
             
             req = requestRepository.save(req);
             
-            // TODO: Có thể tự động forward request cho ASSET_MANAGER ở đây
+            // TODO
             
             return ResponseEntity.ok(DepartmentMapper.toAssetRequestResponse(req));
         } catch (IllegalArgumentException e) {
