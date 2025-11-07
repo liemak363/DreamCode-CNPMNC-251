@@ -9,4 +9,3 @@ databaseChangeLog:
             name: status
             type: VARCHAR(255)
         tableName: asset
-

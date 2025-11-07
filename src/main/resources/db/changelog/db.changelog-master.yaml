@@ -23,3 +23,5 @@ databaseChangeLog:
         file: db/changelog/changes/011-add-is-active-field-to-department.yaml
   - include:
         file: db/changelog/changes/012-add-asset-status.yaml
+  - include:
+        file: db/changelog/changes/013-update-accident-log.yaml
