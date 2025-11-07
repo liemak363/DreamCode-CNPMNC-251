@@ -18,4 +18,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     boolean existsByUserNameAndIsActiveTrue(String userName);
 
     Page<User> findAllByIsActiveTrue(Pageable pageable);
+
+    Page<User> findByRoles_Name(String roleName, Pageable pageable);
+
+    Page<User> findByRoles_NameAndIsActiveTrue(String roleName, Pageable pageable);
 }
