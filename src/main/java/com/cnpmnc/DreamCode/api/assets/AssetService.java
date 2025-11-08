@@ -1,10 +1,12 @@
 package com.cnpmnc.DreamCode.api.assets;
 
-import com.cnpmnc.DreamCode.model.enumType.AssetStatus;
 import com.cnpmnc.DreamCode.dto.request.*;
 import com.cnpmnc.DreamCode.dto.response.*;
 import com.cnpmnc.DreamCode.mapper.AssignAssetMapper;
+import com.cnpmnc.DreamCode.mapper.RetireAssetMapper;
+import com.cnpmnc.DreamCode.mapper.RevokeAssetMapper;
 import com.cnpmnc.DreamCode.model.*;
+import com.cnpmnc.DreamCode.model.enumType.AssetStatus;
 import com.cnpmnc.DreamCode.repository.*;
 import com.cnpmnc.DreamCode.security.CustomUserDetails;
 import lombok.AccessLevel;
@@ -32,14 +34,19 @@ import java.util.stream.Collectors;
 public class AssetService {
     AssetUsageLogRepository assetUsageLogRepository;
     AssignAssetMapper assignAssetMapper;
+    RevokeAssetMapper revokeAssetMapper;
+    RetireAssetMapper retireAssetMapper;
     AssetRepository assetRepository;
     UserRepository userRepository;
     CategoryRepository categoryRepository;
     DepartmentRepository departmentRepository;
     SupplierRepository supplierRepository;
+    AssetRevokeLogRepository assetRevokeLogRepository;
+    AssetRetireLogRepository assetRetiredLogRepository;
 
     // ========== TỪ NHÁNH MAIN: Assign & Revoke ==========
-    
+
+    @Transactional
     public AssignAssetResponse assignAsset(AssignAssetRequest request) {
 
         AssetUsageLog assetUsageLog = assignAssetMapper.toAssetUsageLog(request);
@@ -88,28 +95,73 @@ public class AssetService {
         return response;
     }
 
+    @Transactional
     public RevokeAssetResponse revokeAsset(RevokeAssetRequest request) {
         // Find the active asset usage log for the given asset ID
         AssetUsageLog assetUsageLog = assetUsageLogRepository.findByAssetIdAndEndTimeIsNull(request.getAssetId())
                 .orElseThrow(() -> new IllegalArgumentException("No active assignment found for asset ID " + request.getAssetId()));
 
-        // Set the end time to the current time
-        assetUsageLog.setEndTime(LocalDateTime.now());
 
         // Update the asset status to IN_STOCK
         Asset asset = assetUsageLog.getAsset();
         asset.setStatus(AssetStatus.IN_STOCK);
 
+
+        AssetRevokeLog assetRevokeLog = revokeAssetMapper.toAssetRevokeLog(request);
+        Integer revokedById = getCurrentUserId();
+        User revokedBy = userRepository.findById(revokedById)
+                .orElseThrow(() -> new IllegalArgumentException("Revoker not found."));
+        assetRevokeLog.setRevokedBy(revokedBy);
+        assetRevokeLog.setAsset(asset);
+        // Set the current time as beginTime
+        if (request.getRevokedTime() == null) {
+            assetRevokeLog.setRevokedTime(LocalDateTime.now());
+        }
+        // Set the end time to the current time
+        assetUsageLog.setEndTime(assetRevokeLog.getRevokedTime());
         // Save the updated asset usage log
         assetUsageLog = assetUsageLogRepository.save(assetUsageLog);
-
+        assetRevokeLog = assetRevokeLogRepository.save(assetRevokeLog);
         // Map to RevokeAssetResponse
-        return RevokeAssetResponse.builder()
-                .id(assetUsageLog.getId())
-                .assetId(asset.getId())
-                .endTime(assetUsageLog.getEndTime())
-                .Status(asset.getStatus().name())
-                .build();
+        RevokeAssetResponse response = revokeAssetMapper.toRevokeAssetResponse(assetRevokeLog);
+        response.setAssetId(asset.getId());
+        response.setRevokedById(revokedById);
+        return response;
+    }
+
+    @Transactional
+    public RetireAssetResponse retireAsset(RetireAssetRequest request) {
+        // Check if asset exists
+        Asset asset = assetRepository.findById(request.getAssetId())
+                .orElseThrow(() -> new IllegalArgumentException("Asset with ID " + request.getAssetId() + " does not exist."));
+
+        // Check if asset status is IN_STOCK
+        if (!AssetStatus.IN_STOCK.equals(asset.getStatus())) {
+            throw new IllegalArgumentException("Asset with ID " + request.getAssetId() + " is not in stock and cannot be retired.");
+        }
+
+        // Create and set asset retired log
+        AssetRetireLog retiredLog = retireAssetMapper.toAssetRetireLog(request);
+        retiredLog.setAsset(asset);
+        retiredLog.setRetiredTime(request.getRetiredTime() != null ? request.getRetiredTime() : LocalDateTime.now());
+
+        // Retrieve user ID from token
+        Integer retiredById = getCurrentUserId();
+        User retiredBy = userRepository.findById(retiredById)
+                .orElseThrow(() -> new IllegalArgumentException("Retirer not found."));
+        retiredLog.setRetiredBy(retiredBy);
+
+        // Save the retired log
+        assetRetiredLogRepository.save(retiredLog);
+
+        // Update asset status to RETIRED
+        asset.setStatus(AssetStatus.RETIRED);
+        assetRepository.save(asset);
+        RetireAssetResponse response = retireAssetMapper.toRetireAssetResponse(retiredLog);
+        response.setAssetId(asset.getId());
+        response.setRetiredById(retiredById);
+        response.setRetiredTime(retiredLog.getRetiredTime());
+        return response;
     }
 
     public Integer getCurrentUserId() {
@@ -119,13 +171,13 @@ public class AssetService {
     }
 
     // ========== TỪ NHÁNH THANG: CRUD tài sản ==========
-    
+
     // 1. Tạo tài sản mới
     @Transactional
     public AssetResponse createAsset(AssetCreationRequest request) {
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new IllegalArgumentException("Category not found: " + request.getCategoryId()));
-        
+
         Department department = departmentRepository.findById(request.getDepartmentId())
                 .orElseThrow(() -> new IllegalArgumentException("Department not found: " + request.getDepartmentId()));
 
@@ -149,8 +201,8 @@ public class AssetService {
     }
 
     // 2. Danh sách tra cứu tài sản (với tìm kiếm)
-    public Page<AssetResponse> searchAssets(String name, Integer departmentId, Integer categoryId, 
-                                           int page, int size) {
+    public Page<AssetResponse> searchAssets(String name, Integer departmentId, Integer categoryId,
+                                            int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         Page<Asset> assets = assetRepository.searchAssets(name, departmentId, categoryId, pageable);
         return assets.map(this::toAssetResponse);
@@ -267,7 +319,7 @@ public class AssetService {
                                 .userName(user.getUserName())
                                 .build())
                         .collect(Collectors.toList()))
-                .approvedBy(log.getApprovedBy() != null ? 
+                .approvedBy(log.getApprovedBy() != null ?
                         AssetUsageLogResponse.UserInfo.builder()
                                 .id(log.getApprovedBy().getId())
                                 .userName(log.getApprovedBy().getUserName())

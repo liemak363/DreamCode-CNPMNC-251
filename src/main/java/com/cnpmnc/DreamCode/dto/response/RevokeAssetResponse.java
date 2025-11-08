@@ -13,6 +13,9 @@ import java.time.LocalDateTime;
 public class RevokeAssetResponse {
     Integer id;
     Integer assetId;
-    LocalDateTime endTime;
-    String Status;
+    LocalDateTime revokedTime;
+    Integer revokedById;
+    String reason;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 }

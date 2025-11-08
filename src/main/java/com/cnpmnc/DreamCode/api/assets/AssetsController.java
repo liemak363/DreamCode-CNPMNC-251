@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/assets")
 @RequiredArgsConstructor
 public class AssetsController {
-    
+
     private final AssetService assetService;
 
     // Health check
@@ -59,8 +59,8 @@ public class AssetsController {
 
     // 4. Cập nhật tài sản
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateAsset(@PathVariable Integer id, 
-                                        @Valid @RequestBody AssetUpdateRequest request) {
+    public ResponseEntity<?> updateAsset(@PathVariable Integer id,
+                                         @Valid @RequestBody AssetUpdateRequest request) {
         try {
             return ResponseEntity.ok(assetService.updateAsset(id, request));
         } catch (IllegalArgumentException ex) {
@@ -109,6 +109,16 @@ public class AssetsController {
     public ResponseEntity<?> revokeAsset(@RequestBody @Valid RevokeAssetRequest request) {
         try {
             return ResponseEntity.ok(assetService.revokeAsset(request));
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+        }
+    }
+
+    //9. Thanh lý tài sản
+    @PostMapping("/retire")
+    public ResponseEntity<?> retireAsset(@RequestBody @Valid RetireAssetRequest request) {
+        try {
+            return ResponseEntity.ok(assetService.retireAsset(request));
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
         }
