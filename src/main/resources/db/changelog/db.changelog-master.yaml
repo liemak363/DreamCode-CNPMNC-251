@@ -31,3 +31,5 @@ databaseChangeLog:
         file: db/changelog/changes/015-synchronize-db-for-running.yaml
   - include:
         file: db/changelog/changes/016-remove-unique-dept-mananger.yaml
+  - include:
+        file: db/changelog/changes/017-change-time-to-date.yaml

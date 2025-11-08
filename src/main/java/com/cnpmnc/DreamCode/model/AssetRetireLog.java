@@ -6,7 +6,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -20,7 +20,7 @@ public class AssetRetireLog extends BaseEntity {
     private User retiredBy;
 
     @Column(nullable = false)
-    private LocalDateTime retiredTime;
+    private LocalDate retiredTime;
 
     private String reason;
 

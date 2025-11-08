@@ -3,7 +3,7 @@ package com.cnpmnc.DreamCode.dto.request;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RetireAssetRequest {
     Integer assetId;
-    LocalDateTime retiredTime;
+    LocalDate retiredTime;
     String reason;
     Double salvageValue;
 }

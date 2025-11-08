@@ -6,7 +6,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -20,7 +20,7 @@ public class AssetRevokeLog extends BaseEntity {
     private User revokedBy;
 
     @Column(nullable = false)
-    private LocalDateTime revokedTime;
+    private LocalDate revokedTime;
 
     private String reason;
 }

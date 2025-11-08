@@ -3,6 +3,7 @@ package com.cnpmnc.DreamCode.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 public class RevokeAssetResponse {
     Integer id;
     Integer assetId;
-    LocalDateTime revokedTime;
+    LocalDate revokedTime;
     Integer revokedById;
     String reason;
     LocalDateTime createdAt;

@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -118,10 +119,10 @@ public class AssetService {
         assetRevokeLog.setAsset(asset);
         // Set the current time as beginTime
         if (request.getRevokedTime() == null) {
-            assetRevokeLog.setRevokedTime(LocalDateTime.now());
+            assetRevokeLog.setRevokedTime(LocalDate.now());
         }
         // Set the end time to the current time
-        assetUsageLog.setEndTime(assetRevokeLog.getRevokedTime());
+        assetUsageLog.setEndTime(assetRevokeLog.getRevokedTime().atStartOfDay());
         // Save the updated asset usage log
         assetUsageLog = assetUsageLogRepository.save(assetUsageLog);
         assetRevokeLog = assetRevokeLogRepository.save(assetRevokeLog);
@@ -146,7 +147,7 @@ public class AssetService {
         // Create and set asset retired log
         AssetRetireLog retiredLog = retireAssetMapper.toAssetRetireLog(request);
         retiredLog.setAsset(asset);
-        retiredLog.setRetiredTime(request.getRetiredTime() != null ? request.getRetiredTime() : LocalDateTime.now());
+        retiredLog.setRetiredTime(request.getRetiredTime() != null ? request.getRetiredTime() : LocalDate.now());
 
         // Retrieve user ID from token
         Integer retiredById = getCurrentUserId();
