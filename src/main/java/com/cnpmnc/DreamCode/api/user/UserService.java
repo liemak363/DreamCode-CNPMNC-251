@@ -164,8 +164,6 @@ public class UserService {
             .supplierName(asset.getSupplier() != null ? asset.getSupplier().getName() : null)
             .departmentId(asset.getDepartment() != null ? asset.getDepartment().getId() : null)
             .departmentName(asset.getDepartment() != null ? asset.getDepartment().getName() : null)
-            .createdAt(asset.getCreatedAt())
-            .updatedAt(asset.getUpdatedAt())
             .build();
     }
     

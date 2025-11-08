@@ -29,14 +29,11 @@ public class AssetResponse {
     // Thông tin supplier
     private Integer supplierId;
     private String supplierName;
-    
+
     // Thông tin department
     private Integer departmentId;
     private String departmentName;
     private DepartmentInfo department;
-    
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
     @Data
     @Builder

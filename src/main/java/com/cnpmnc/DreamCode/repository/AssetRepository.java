@@ -4,6 +4,7 @@ import com.cnpmnc.DreamCode.model.Asset;
 import com.cnpmnc.DreamCode.model.Department;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +36,9 @@ public interface AssetRepository extends JpaRepository<Asset, Integer> {
     
     // Tìm theo department
     Page<Asset> findByDepartmentId(Integer departmentId, Pageable pageable);
+
+    @Query("SELECT a FROM Asset a WHERE a.department.id IN :departmentIds")
+    Page<Asset> findByDepartmentIdIn(@Param("departmentIds") List<Integer> departmentIds, Pageable pageable);
     
     // Tìm theo category
     Page<Asset> findByCategoryId(Integer categoryId, Pageable pageable);
