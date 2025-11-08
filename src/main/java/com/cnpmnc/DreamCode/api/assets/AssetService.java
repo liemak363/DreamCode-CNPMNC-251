@@ -71,6 +71,9 @@ public class AssetService {
         }
         assetUsageLog.setUsers(users);
 
+        Department department = users.get(0).getDepartment();
+
+        asset.setDepartment(department);
         // Retrieve user ID from access token
         Integer approvedById = getCurrentUserId();
         User approvedBy = userRepository.findById(approvedById)

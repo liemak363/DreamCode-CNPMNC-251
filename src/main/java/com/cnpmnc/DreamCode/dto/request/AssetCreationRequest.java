@@ -37,7 +37,7 @@ public class AssetCreationRequest {
     private Integer usefulLifeMonths;
 
     @NotNull(message = "Department ID is required")
-    private Integer departmentId;
+    private Integer departmentId = 36;
 
     @NotNull(message = "Category ID is required")
     private Integer categoryId;
