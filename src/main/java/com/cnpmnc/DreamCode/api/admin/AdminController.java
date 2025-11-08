@@ -35,7 +35,7 @@ public class AdminController {
 
     @GetMapping("/users")
     public List<UserResponse> getUsers(@RequestParam(defaultValue = "0") int page,
-                                       @RequestParam(defaultValue = "10") int size) {
+                                       @RequestParam(defaultValue = "100") int size) {
         return adminService.getUsers(page, size);
     }
 
