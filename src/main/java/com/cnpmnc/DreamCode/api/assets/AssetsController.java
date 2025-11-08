@@ -3,6 +3,8 @@ package com.cnpmnc.DreamCode.api.assets;
 import com.cnpmnc.DreamCode.dto.request.*;
 import com.cnpmnc.DreamCode.dto.response.AssetResponse;
 import com.cnpmnc.DreamCode.dto.response.AssetUsageLogResponse;
+import com.cnpmnc.DreamCode.dto.response.RetireAssetResponse;
+import com.cnpmnc.DreamCode.dto.response.RevokeAssetResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -92,6 +94,29 @@ public class AssetsController {
         }
     }
 
+    @GetMapping("/{id}/revoke-logs")
+    public ResponseEntity<?> getAssetRevokeLogs(@PathVariable Integer id,
+                                                @RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "10") int size) {
+        try {
+            Page<RevokeAssetResponse> logs = assetService.getRevokeAssets(id, page, size);
+            return ResponseEntity.ok(logs);
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}/retire-logs")
+    public ResponseEntity<?> getAssetRetireLogs(@PathVariable Integer id,
+                                                @RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "10") int size) {
+        try {
+            Page<RetireAssetResponse> logs = assetService.getRetireAssets(id, page, size);
+            return ResponseEntity.ok(logs);
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+    }
     // ========== TỪ NHÁNH MAIN: Assign & Revoke ==========
 
     // 7. Phân bổ tài sản cho người dùng
@@ -123,4 +148,6 @@ public class AssetsController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
         }
     }
+
+
 }

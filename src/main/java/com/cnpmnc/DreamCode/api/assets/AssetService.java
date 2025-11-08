@@ -275,6 +275,29 @@ public class AssetService {
         return logs.map(this::toAssetUsageLogResponse);
     }
 
+    public Page<RevokeAssetResponse> getRevokeAssets(Integer assetId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("revokedTime").descending());
+        Page<AssetRevokeLog> revokeLogs = assetRevokeLogRepository.findByAssetIdOrderByCreatedAtDesc(assetId, pageable);
+        return revokeLogs.map(log -> {
+            RevokeAssetResponse response = revokeAssetMapper.toRevokeAssetResponse(log);
+            response.setAssetId(log.getAsset().getId());
+            response.setRevokedById(log.getRevokedBy().getId());
+            return response;
+        });
+    }
+
+    public Page<RetireAssetResponse> getRetireAssets(Integer assetId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("retiredTime").descending());
+        Page<AssetRetireLog> retireLogs = assetRetiredLogRepository.findByAssetIdOrderByCreatedAtDesc(assetId, pageable);
+        return retireLogs.map(log -> {
+            RetireAssetResponse response = retireAssetMapper.toRetireAssetResponse(log);
+            response.setAssetId(log.getAsset().getId());
+            response.setRetiredById(log.getRetiredBy().getId());
+            response.setRetiredTime(log.getRetiredTime());
+            return response;
+        });
+    }
+
     // Helper method: Convert Asset to AssetResponse
     private AssetResponse toAssetResponse(Asset asset) {
         return AssetResponse.builder()
@@ -328,4 +351,3 @@ public class AssetService {
     }
 
 }
-
